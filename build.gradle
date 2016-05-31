@@ -1,0 +1,113 @@
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'maven-publish'
+
+//version '1.0-SNAPSHOT'
+sourceCompatibility = 1.7
+compileJava.dependsOn clean
+publish.dependsOn build
+configurations.all {
+	resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
+	resolutionStrategy.cacheDynamicVersionsFor 0, 'seconds'
+ }
+[compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
+sourceSets {
+    main {
+        java { srcDirs = ['src/main/java']}
+         resources {
+               srcDirs = ['src/main/resources']
+         }
+    }
+
+}
+ext{
+	moduleName="batch-client-1.0-SNAPSHOT";
+	//version '1.0-SNAPSHOT'	
+    publishUserName = "resdev"
+    publishUserPassword = "resdev"
+    publishURL="http://10.1.228.199:18081/nexus/content/repositories/snapshots/"
+    builtBy="gradle 2.2"
+    
+    runnerBaseVersion="1.0-SNAPSHOT"
+
+}
+
+repositories {
+    maven { url "http://10.1.228.199:18081/nexus/content/groups/public/" }
+}
+
+dependencies{
+    compile 'org.mybatis:mybatis:3.3.0'
+    compile 'org.mybatis:mybatis-spring:1.2.3'
+    compile 'mysql:mysql-connector-java:5.1.36'
+    compile 'org.springframework:spring-tx:4.1.7.RELEASE'
+    compile 'org.springframework:spring-jdbc:4.1.7.RELEASE'
+//    compile 'log4j:log4j:1.2.11'
+	compile 'log4j:log4j:1.2.17'
+    
+    compile 'org.apache.hadoop:hadoop-common:2.5.1'
+    compile 'org.apache.hbase:hbase-common:1.0.1.1'
+    compile 'org.apache.hbase:hbase-client:1.0.1.1'
+
+//	compile 'com.ai.runner.center.dshm:dshmservice:1.0.1-SNAPSHOT'
+//	compile 'com.ai.runner.center.balance:resdeposit:1.0-SNAPSHOT'
+	compile 'com.ai.opt.sdk:opt-sdk:2.0-SNAPSHOT'
+	
+    testCompile(
+        "org.springframework:spring-test:3.2.13.RELEASE",
+        "junit:junit:4.11"
+    )
+    
+//    compile ("com.ai.runner.util:runner-util:1.0.2-SNAPSHOT") {
+//        exclude group: 'com.google.guava', module: 'guava'
+//    }
+}
+
+
+jar {
+    baseName moduleName
+    version version
+    include "com/ai/runner/center/bmc/*/**"
+	manifest {
+        attributes 'packageName': baseName, 'Built-By': builtBy,'create-date': new Date().format('yyyy-MM-dd HH:mm:ss'), 'Manifest-Version': runnerBaseVersion
+    }
+    destinationDir file("$buildDir/libs/core-libs") 
+}
+task copyChildConfig(type: Copy) { 
+        from fileTree(dir: 'src/main/resources')
+        destinationDir file("$buildDir/config")
+}
+
+task copy3rdJars(type: Copy) { 
+        from configurations.runtime
+        destinationDir file("$buildDir/libs/3rd-libs") 
+}
+
+task zipLibs(type: Zip) {
+	baseName "libs1"
+    from "$buildDir/libs"
+}
+
+task zipConfig(type: Zip) {
+	baseName "config1"
+    from "$buildDir/config"
+}
+
+
+build.dependsOn copy3rdJars, copyChildConfig, zipLibs, zipConfig
+publishing {
+    publications {
+        publishing.publications.create("${moduleName}", MavenPublication) {
+            groupId group
+            artifactId moduleName
+            version version
+            artifact jar           
+        }
+    }
+    repositories {
+
+    }
+}
+
+
+
