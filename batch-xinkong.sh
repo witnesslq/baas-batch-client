@@ -25,6 +25,6 @@ export JAVA_OPTIONS=" -Dfile.encoding=UTF-8 -Djava.net.preferIPv4Stack=true -Dsu
 MEM_ARGS="-Xms256m -Xmx512m -XX:PermSize=64M -XX:MaxPermSize=128M" 
 
 #启动java虚拟机和程序
-${JAVA_HOME}/bin/java ${MEM_ARGS}   ${JAVA_OPTIONS} com.ai.baas.omc.core.BatchStartServer  >  2>&1 &
+${JAVA_HOME}/bin/java ${MEM_ARGS}   ${JAVA_OPTIONS} com.ai.baas.omc.core.BatchStartServer  > $HOME/logs/baas-batch-xinkong-client.log &2>&1 &
 
 
