@@ -67,7 +67,7 @@ dependencies{
 jar {
     baseName moduleName
     version version
-    include "com/ai/runner/center/bmc/*/**"
+    include "com/ai/baas/omc/*/**"
 	manifest {
         attributes 'packageName': baseName, 'Built-By': builtBy,'create-date': new Date().format('yyyy-MM-dd HH:mm:ss'), 'Manifest-Version': runnerBaseVersion
     }
@@ -92,6 +92,7 @@ task zipConfig(type: Zip) {
 	baseName "config1"
     from "$buildDir/config"
 }
+
 
 
 build.dependsOn copy3rdJars, copyChildConfig, zipLibs, zipConfig
