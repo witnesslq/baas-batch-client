@@ -25,11 +25,14 @@ public class BatchStartServer {
 	       context.start();
 	       ConditionParam conditionParam = (ConditionParam)context.getBean("conditionParam");
 	       String tenant_id = conditionParam.getTenantId();
+	       String owner_type=conditionParam.getOwerType();
+	       String amount_type=conditionParam.getAmountType();
+	       String event_type=conditionParam.getEventType();
 	       IBatchStart batchstart =(IBatchStart)context.getBean("batchStart");
-	       //
+     //
 	       try {
 	    	
-			batchstart.batchStart(tenant_id);
+			batchstart.batchStart(tenant_id,owner_type,amount_type,event_type);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

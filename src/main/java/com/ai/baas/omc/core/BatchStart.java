@@ -26,7 +26,7 @@ public class BatchStart implements IBatchStart{
 	
 	
 	
-	public String batchStart (String tenant_id) throws Exception{
+	public String batchStart (String tenant_id,String ower_type,String amount_type,String event_type) throws Exception{
 	       BlUserinfo blUserinfo = new BlUserinfo();
 	       JSONObject jsonObject = new JSONObject();
 	       BlUserinfoMapper blUserinfoMapper = sqlSessionTemplate.getMapper(BlUserinfoMapper.class);
@@ -49,13 +49,13 @@ public class BatchStart implements IBatchStart{
 	           if(userInfoList.size()>0){
 	               for(BlUserinfo r : userInfoList){
 	            	   jsonObject.put(OmcCalKey.OMC_OWNER_ID, r.getSubsId());
-	            	   jsonObject.put(OmcCalKey.OMC_TENANT_ID, r.getTenantId());
+	            	   jsonObject.put(OmcCalKey.OMC_TENANT_ID, tenant_id);
 	            	   jsonObject.put(OmcCalKey.OMC_AMOUNT, "0");//0
 	                   //acct:账户；cust:客户；subs:用户
-	                   jsonObject.put(OmcCalKey.OMC_OWNER_TYPE, "subs");
-	                   jsonObject.put(OmcCalKey.OMC_AMOUNT_TYPE, "DATA");
+	                   jsonObject.put(OmcCalKey.OMC_OWNER_TYPE, ower_type);
+	                   jsonObject.put(OmcCalKey.OMC_AMOUNT_TYPE, amount_type);
 	                   //事件类型：CASH主业务（按资料信控），VOICE 语音，SMS 短信，DATA 数据
-	                   jsonObject.put(OmcCalKey.OMC_EVENT_TYPE, "DATA");//DATA
+	                   jsonObject.put(OmcCalKey.OMC_EVENT_TYPE, event_type);//DATA
 	                   //数量的增减属性，包括PLUS(导致余额增加的，如缴费导致的)，MINUS(导致余额减少的，如业务使用导致的)
 	                   jsonObject.put(OmcCalKey.OMC_AMOUNT_MARK, "PLUS");//PLUS
 	                   //来源 resource：资源入账，bmc：计费
