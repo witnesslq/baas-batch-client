@@ -48,7 +48,7 @@ public class BatchStart implements IBatchStart{
 	           log.info("-------------->>>:"+userInfoList.size());
 	           if(userInfoList.size()>0){
 	               for(BlUserinfo r : userInfoList){
-	            	   jsonObject.put(OmcCalKey.OMC_SUBS_ID, r.getSubsId());
+	            	   jsonObject.put(OmcCalKey.OMC_OWNER_ID, r.getSubsId());
 	            	   jsonObject.put(OmcCalKey.OMC_TENANT_ID, r.getTenantId());
 	            	   jsonObject.put(OmcCalKey.OMC_AMOUNT, "0");//0
 	                   //acct:账户；cust:客户；subs:用户
